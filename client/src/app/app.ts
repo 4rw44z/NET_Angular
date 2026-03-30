@@ -10,7 +10,7 @@ import { last, lastValueFrom, Subject, Subscription, takeUntil } from 'rxjs';
   styleUrl: './app.css'
 })
 export class App implements OnInit{
-  protected readonly title = signal('client');
+  protected readonly title = signal('Dating App');
   private http = inject(HttpClient)
   users: any;
   unsubscribe = new Subject<void>();
