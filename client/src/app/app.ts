@@ -1,0 +1,29 @@
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { last, lastValueFrom, Subject, Subscription, takeUntil } from 'rxjs';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App implements OnInit{
+  protected readonly title = signal('client');
+  private http = inject(HttpClient)
+  users: any;
+  unsubscribe = new Subject<void>();
+  protected members = signal<any>([]);
+  async ngOnInit() {
+  this.members.set(await this.getMembers());
+  }
+  async getMembers() {
+    try {
+      return lastValueFrom(this.http.get('https://localhost:5001/api/members'));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+}
