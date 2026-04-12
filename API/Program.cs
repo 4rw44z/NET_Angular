@@ -18,7 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     var tokenKey = builder.Configuration["TokenKey"] ?? throw new Exception("Cannot get token key");
-    options.TokenValidationParameters = new TokenValidationParameters
+    // Decoding the token and validating it against the token key
+    options.TokenValidationParameters = new TokenValidationParameters 
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
@@ -30,6 +31,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
 var app = builder.Build();
+// Configure the HTTP request pipeline.
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
 // Middleware order matters, authentication should be before authorization
 app.UseAuthentication();
