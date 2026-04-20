@@ -11,16 +11,18 @@ export class AccountService {
   baseUrl = 'https://localhost:5001/api/';
   currentUser = signal<IUser | null>(null);
   constructor() {
+    this.currentUser.set(this.getUserStatefromLocalStorage());
     effect(() => {
       const user = this.currentUser();
       if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user', JSON.stringify(user)); // initial implemenation to persist the token before we introduce user identity
       }
       else {
         localStorage.removeItem('user');
       }
     })
   }
+  
   login(cred: any) {
     return this.http.post<IUser>(this.baseUrl + 'account/login/', cred).pipe(tap(
       user => {
@@ -32,7 +34,7 @@ export class AccountService {
     ));
   }
 
-  register(creds:RegisterCreds) {
+  register(creds:RegisterCreds){
     return this.http.post<IUser>(this.baseUrl + 'account/register/', creds).pipe(tap(
       user => {
         if (user) {
@@ -42,8 +44,12 @@ export class AccountService {
     ))
   }
 
-  logout() {
+  logout(): void {
     this.currentUser.set(null);
   }
 
+  getUserStatefromLocalStorage(): IUser | null {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null; 
+  }
 }

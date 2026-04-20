@@ -21,13 +21,6 @@ export class App implements OnInit {
   private accountService = inject(AccountService);
   async ngOnInit() {
   this.members.set(await this.getMembers());
-  this.setCurrentUser();
-  }
-
-  setCurrentUser(): void {
-    const user = localStorage.getItem('user');
-    if(!user) return;
-    this.accountService.currentUser.set(JSON.parse(user));
   }
   async getMembers() {
     try {
