@@ -1,6 +1,7 @@
 import { authGuard } from '../core/guards/auth-guard';
 import { Home } from '../features/home/home';
 import { Routes } from '@angular/router';
+import { NotFound } from '../shared/errors/not-found/not-found';
 
 export const routes: Routes = [
     { path: '', loadComponent: () => import('../features/home/home').then(m => m.Home) },
@@ -15,5 +16,10 @@ export const routes: Routes = [
             { path: 'messages', loadComponent: () => import('../features/messages/messages').then(m => m.Messages) },
         ]
     },
-    { path: '**', component: Home }
+    {
+        path: 'errors',
+        loadComponent: () => import("../features/test-errors/test-errors").then(c => c.TestErrors)
+    },
+    {path: 'server-error', loadComponent: () => import('../shared/errors/server-error/server-error').then(c => c.ServerError) },
+    { path: '**', component: NotFound }
 ];

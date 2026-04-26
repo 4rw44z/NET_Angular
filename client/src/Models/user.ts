@@ -9,7 +9,7 @@ export interface IUser  {
 export type RegisterCreds = {
     email: string;
     displayName: string;
-    passowrd: string;
+    password: string;
     gender: string;
     dateOfBirth: string;
     city: string;
